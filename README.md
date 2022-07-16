@@ -1,2 +1,22 @@
 # AutoBackup
 A set of programs to automate backups to a seprate machine.
+
+Please note that all IP addresses are hardcoded, they will need to be changed!
+
+  ABServerHost should be run on whatever machine is acting as the server, it is set up to create its own storage tree under /home/<username>/Documents/Toshiba3TB/. Toshiba3TB is where I have one of my hard drives mounted but you should be able to change this to whatever you want. While your creating this directory their is a variable at the top of ABServerHost that should store your username, please change it from the default to whatever your username is. This program also runs on port 2075, please make sure your firewall has port 2075 open both ways. If everything runs correctly, the storage tree it makes will look something like this.
+ 
+  AutoBackup
+    Kira
+      2022-07-07
+        ExampleFiles...
+      2022-08-07
+        ExampleFiles...
+    Romulus
+      2022-07-07
+        ExampleFiles...
+      2022-08-07
+        ExampleFiles...
+
+  Every time a backup is made it will create a new directory with the username of the client if one does not already exist. In that folder it will check if a folder with the current time and date exists, if one doesn't it will create one. In that directory it will write any files that the client has sent it. It also will attempt to recreate the file structure of the directory if has been sent. If repeated backups are made on the same day by the same user it should detect that the files are already there and tell the client to skip any files it already has, it uses checksums to make sure the contents of the files are also identical before throwing out any data from the client. Once it finishes writing data from the client it should go back to checking for incoming requests.
+  
+  ABClient should be run on any machine you want to backup. It reads any paths from the BackupList.txt file and attempts to send all files contained in that folder over to whatever machine is running ABServerHost. It can also read paths directly to a file. If you are sending a folder please include a trailing '/'
